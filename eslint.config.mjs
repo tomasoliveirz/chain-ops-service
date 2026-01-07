@@ -5,6 +5,6 @@ export default [
     js.configs.recommended,
     ...tseslint.configs.recommended,
     {
-        ignores: ["dist/**"],
+    ignores: ["dist/**", "jest.config.js"],
     },
 ];
