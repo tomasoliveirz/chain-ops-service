@@ -10,3 +10,10 @@ Educational, production-style backend service that:
 npm install
 cp .env.example .env
 npm run dev
+```
+
+## Endpoints
+- GET /health
+- GET /version
+- GET /chain/status
+

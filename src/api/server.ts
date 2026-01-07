@@ -1,9 +1,10 @@
 import express from "express";
 import {EvmClient} from "../chain/evmClient";
+import type { AppConfig } from "../types/config";
 
-
-export function buildServer() {
+export function buildServer(config: AppConfig) {
     const app = express();
+    const evm = new EvmClient(config.rpcUrl);
 
     app.use(express.json());
 
@@ -15,10 +16,6 @@ export function buildServer() {
         res.send({name: "chain-ops-service", version: "0.1.0"});
     });
 
-    const rpcUrl = process.env.EVM_RPC_URL;
-    if (!rpcUrl) throw new Error("EVM_RPC_URL is missing");
-
-    const evm = new EvmClient(rpcUrl);
 
     app.get("/chain/status", async (_req, res) => {
         const latestBlock = await evm.getLatestBlockNumber();
