@@ -22,6 +22,20 @@ export function buildServer(config: AppConfig) {
         res.json({ chain: "sepolia", latestBlock});
     });
 
+    app.get("/chain/transfers", async (req, res) => {
+    const tokenAddress = String(req.query.token ?? "");
+    const fromBlock = Number(req.query.fromBlock);
+    const toBlock = Number(req.query.toBlock);
+
+    if (!tokenAddress || !Number.isFinite(fromBlock) || !Number.isFinite(toBlock)) {
+        return res.status(400).json({
+        error: "Usage: /chain/transfers?token=0x...&fromBlock=...&toBlock=..."
+        });
+    }
+
+    const transfers = await evm.getErc20TransferLogs({ tokenAddress, fromBlock, toBlock });
+    res.json({ count: transfers.length, transfers });
+    });
 
     return app;
 }
